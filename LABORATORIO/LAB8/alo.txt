@@ -1,0 +1,93 @@
+import socket
+import speech_recognition as sr
+import time
+from gpiozero import LED
+led = LED(16)
+led2 = LED(20)
+led3 = LED(21)
+s = socket.socket()
+s.bind(("192.168.43.33",2024))
+s.listen(10)
+print("Esperando conexiones...")
+(sc,addrc) = s.accept()
+print("Cliente conectado",addrc)
+continuar = True
+while continuar:
+    text = sc.recv(64)
+    text = text.decode("utf-8")
+
+    if not text:
+        continuar = False
+        print("Cliente desconectado")
+    else:
+        try:
+            
+            print("Esto es lo que has dicho :",text)
+            text = text.lower()
+             
+            if text == 'encender uno'or text == 'encender 1':
+                led.on()
+            elif text == 'desconectar uno' or text == 'desconectar 1':
+                led.off()
+            elif text == 'encender dos' or text == 'encender 2':
+                led2.on()
+            elif text == 'desconectar dos' or text == 'desconectar 2':
+                led2.off()
+            elif text == 'encender tres'or text == 'encender 3':
+                led3.on()
+                
+            elif text == 'desconectar tres'or text == 'desconectar 3': 
+                led3.off()
+            elif text == 'desconectar todos'or text == 'desconectar todos':
+                led.off()
+                led2.off()
+                led3.off()
+            elif text == 'encender todos'or text == 'encender todos':
+                led.on()
+                led2.on()
+                led3.on()
+        except:
+            print("Lo siento no te entendí")
+sc.close()
+s.close()
+print("Fin de programa")
+
+'''import speech_recognition as sr
+import time
+from gpiozero import LED
+led = LED(16)
+led2 = LED(20)
+led3 = LED(21)
+while True:
+    r = sr.Recognizer()
+    with sr.Microphone() as recurso:
+        print("Dime algo...")
+        audio = r.listen(recurso)
+        try:
+            text = r.recognize_google(audio,language='es',show_all=False)
+            print("Esto es lo que has dicho :",text)
+            text = text.lower()
+             
+            if text == 'encender uno'or text == 'encender 1':
+                led.on()
+            elif text == 'desconectar uno' or text == 'desconectar 1':
+                led.off()
+            elif text == 'encender dos' or text == 'encender 2':
+                led2.on()
+            elif text == 'desconectar dos' or text == 'desconectar 2':
+                led2.off()
+            elif text == 'encender tres'or text == 'encender 3':
+                led3.on()
+                
+            elif text == 'desconectar tres'or text == 'desconectar 3': 
+                led3.off()
+            elif text == 'desconectar todos'or text == 'desconectar todos':
+                led.off()
+                led2.off()
+                led3.off()
+            elif text == 'encender todos'or text == 'encender todos':
+                led.on()
+                led2.on()
+                led3.on()
+        except:
+            print("Lo siento no te entendí")
